@@ -12,6 +12,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 function Copyright() {
     return (
@@ -59,7 +60,24 @@ const useStyles = makeStyles((theme) => ({
 
 const AccessWallet = () => {
     const classes = useStyles();
+    const { register, handleSubmit } = useForm();
 
+    const renderInputs = () => {
+        const inputs = [];
+        for (let i = 1; i < 13; i++) {
+            inputs.push(
+                <TextField
+                    size='small'
+                    key={i}
+                    variant='outlined'
+                    margin='dense'
+                    label={`${i}`}
+                    {...register(`input-${i}`, { required: true })}
+                ></TextField>
+            );
+        }
+        return inputs;
+    };
     return (
         <Grid container component='main' className={classes.root}>
             <CssBaseline />
