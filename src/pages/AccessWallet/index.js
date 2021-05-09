@@ -1,18 +1,19 @@
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import axios from 'axios';
+import { Controller, useForm } from 'react-hook-form';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import { ENDPOINT } from '../../config';
 
 function Copyright() {
     return (
@@ -56,28 +57,59 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    inputs: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gridGap: '0 10px',
+    },
+    title: {
+        marginTop: 50,
+    },
 }));
 
 const AccessWallet = () => {
     const classes = useStyles();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, control } = useForm();
+    const history = useHistory();
 
     const renderInputs = () => {
         const inputs = [];
-        for (let i = 1; i < 13; i++) {
+        for (let i = 0; i < 12; i++) {
             inputs.push(
-                <TextField
-                    size='small'
+                <Controller
+                    as={
+                        <TextField
+                            size='small'
+                            variant='filled'
+                            margin='dense'
+                            label={`${i + 1}`}
+                        />
+                    }
                     key={i}
-                    variant='outlined'
-                    margin='dense'
-                    label={`${i}`}
-                    {...register(`input-${i}`, { required: true })}
-                ></TextField>
+                    control={control}
+                    name={`input-${i}`}
+                    defaultValue=''
+                />
             );
         }
         return inputs;
     };
+
+    const onSubmit = async (data) => {
+        const inputs = Object.values(data);
+
+        const res = await axios.post(ENDPOINT + '/validateMnemoricPhrase', {
+            mnemoric: inputs.join(' '),
+        });
+
+        if (!res.data.note) {
+            toast.error('Invalid mnemoric. Please try again !');
+            return;
+        }
+
+        history.push('/dashboard');
+    };
+
     return (
         <Grid container component='main' className={classes.root}>
             <CssBaseline />
@@ -94,33 +126,11 @@ const AccessWallet = () => {
                         Do not have a wallet?{' '}
                         <RouterLink to='/create-wallet'>Create A New Wallet</RouterLink>
                     </Typography>
-                    <form className={classes.form} noValidate>
-                        <TextField
-                            variant='outlined'
-                            margin='normal'
-                            required
-                            fullWidth
-                            id='email'
-                            label='Email Address'
-                            name='email'
-                            autoComplete='email'
-                            autoFocus
-                        />
-                        <TextField
-                            variant='outlined'
-                            margin='normal'
-                            required
-                            fullWidth
-                            name='password'
-                            label='Password'
-                            type='password'
-                            id='password'
-                            autoComplete='current-password'
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value='remember' color='primary' />}
-                            label='Remember me'
-                        />
+                    <Typography className={classes.title} variant='h5'>
+                        Please type in your mnemonic phrase
+                    </Typography>
+                    <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <div className={classes.inputs}>{renderInputs()}</div>
                         <Button
                             type='submit'
                             fullWidth
@@ -128,26 +138,15 @@ const AccessWallet = () => {
                             color='primary'
                             className={classes.submit}
                         >
-                            Sign In
+                            Access Wallet
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href='#' variant='body2'>
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href='#' variant='body2'>
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
                         <Box mt={5}>
                             <Copyright />
                         </Box>
                     </form>
                 </div>
             </Grid>
+            <ToastContainer />
         </Grid>
     );
 };

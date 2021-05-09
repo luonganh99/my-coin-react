@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import AccessWallet from './pages/AccessWallet';
 import CreateWallet from './pages/CreateWallet';
 import Dashboard from './pages/Dashboard';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
     // const [response, setResponse] = useState('');

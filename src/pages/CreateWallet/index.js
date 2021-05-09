@@ -19,8 +19,9 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
-const ENDPOINT = 'http://localhost:4000';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import { ENDPOINT } from '../../config';
 
 function Copyright() {
     return (
@@ -77,13 +78,11 @@ const useStyles = makeStyles((theme) => ({
 const CreateWallet = () => {
     const classes = useStyles();
     const [phrase, setPhrase] = useState([]);
-    const [confirmPhrase, setConfirmPhrase] = useState([]);
+    // const [confirmPhrase, setConfirmPhrase] = useState([]);
+    const history = useHistory();
     const [open, setOpen] = useState(false);
     const { control, handleSubmit, setValue, getValues } = useForm();
 
-    console.log('get' + getValues('input-6'));
-
-    console.log(phrase);
     useEffect(() => {
         const generateMnemoricPhrase = async () => {
             const res = await axios.get(ENDPOINT + '/generateMnemoricPhrase');
@@ -106,24 +105,26 @@ const CreateWallet = () => {
     }, [open, phrase, setValue]);
 
     const handleOpen = () => {
-        // setConfirmPhrase(
-        //     phrase.map((el, i) => {
-        //         if (i === 1 || i === 5 || i === 6 || i === 10 || i === 11) {
-        //             return '';
-        //         }
-        //         return el;
-        //     })
-        // );
-        // phrase.forEach((el, i) => {
-        //     if (i === 1 || i === 5 || i === 6 || i === 10 || i === 11) {
-        //         setValue(`input-${i + 1}`, '');
-        //     }
-        //     setValue(`input-${i + 1}`, el);
-        // });
         setOpen(true);
     };
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = (data) => {
+        let inputs = Object.values(data);
+        let isValid = true;
+
+        for (let i = 0; i < inputs.length; i++) {
+            if (phrase[i] !== inputs[i]) {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (!isValid) {
+            toast.error('Invalid Mnemonic. Please try again !');
+            return;
+        }
+        history.push('/access-wallet');
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -203,6 +204,7 @@ const CreateWallet = () => {
                                             label={`${i + 1}`}
                                         />
                                     }
+                                    key={i}
                                     control={control}
                                     name={`input-${i}`}
                                 />
@@ -218,6 +220,7 @@ const CreateWallet = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <ToastContainer />
         </Grid>
     );
 };
