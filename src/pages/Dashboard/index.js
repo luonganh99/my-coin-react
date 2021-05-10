@@ -2,16 +2,25 @@ import { useEffect, useState } from 'react';
 import Layout from '../../components/DashboardLayout';
 import axios from 'axios';
 import socketIOClient from 'socket.io-client';
-import {
-    Box,
-    Container,
-    Grid
-  } from '@material-ui/core';
-import Budget from '../../components/Budget';
+import { Box, Container, Grid } from '@material-ui/core';
+import Balance from '../../components/Dashboard/Balance';
+import Address from '../../components/Dashboard/Address';
+import { useAuthContext } from '../../context/AuthContext';
+import SendCoin from '../../components/Dashboard/SendCoin';
+import LastestBlocks from '../../components/Dashboard/LastestBlocks';
+import LastestTransactions from '../../components/Dashboard/LastestTransactions';
 
 const ENDPOINT = 'http://localhost:4000';
 
 const Dashboard = () => {
+    const { authData } = useAuthContext();
+
+    const [balance, setBalance] = useState('');
+    const [blocks, setBlocks] = useState([]);
+    const [transactions, setTransactions] = useState([]);
+
+    console.log('auth ', authData);
+
     useEffect(() => {
         const socket = socketIOClient(ENDPOINT);
         socket.on('PT', (data) => {
@@ -21,15 +30,24 @@ const Dashboard = () => {
         return () => socket.disconnect();
     }, []);
 
-    const handleSendCoinClick = async () => {
-        const res = await axios.post(ENDPOINT + '/transaction/broadcast', {
-            amount: 50,
-            sender: '02609934acf7eac102487d046b8e94cfd10d8aaf013c6263e3e664131568afaf27',
-            recipient: '03c9fbe312af86a63695f7e184149751672f9c667a2b4b141339301fb56f11cbc2',
-        });
+    useEffect(() => {
+        const getAddressData = async () => {
+            const res = await axios.get(ENDPOINT + '/address/' + authData.publicKey);
 
-        console.log(res.data);
-    };
+            setBalance(res.data.addressData.addressBalance);
+        };
+        getAddressData();
+    }, []);
+
+    useEffect(() => {
+        const getBlockchainData = async () => {
+            const res = await axios.get(ENDPOINT + '/blockchain');
+
+            setBlocks(res.data.chain);
+            setTransactions(res.data.transactions);
+        };
+        getBlockchainData();
+    }, []);
 
     const handleMineCoinClick = async () => {
         const res = await axios.post(ENDPOINT + '/mine', {
@@ -50,36 +68,29 @@ const Dashboard = () => {
                 sx={{
                     backgroundColor: 'background.default',
                     minHeight: '100%',
-                    py: 3
+                    py: 3,
                 }}
             >
                 <Container maxWidth={false}>
-                    <Grid
-                    container
-                    spacing={3}
-                    >
-                        <Grid
-                            item
-                            lg={3}
-                            sm={6}
-                            xl={3}
-                            xs={12}
-                        >
-                            {/* <button onClick={handleSendCoinClick}>Send coin</button> */}
-                            <Budget />
+                    <Grid container spacing={3}>
+                        <Grid item lg={4} sm={6} xl={3} xs={12}>
+                            <Address address={authData.publicKey} />
                         </Grid>
-                        <Grid
-                            item
-                            lg={3}
-                            sm={6}
-                            xl={3}
-                            xs={12}
-                        >
-                            <button onClick={handleMineCoinClick}>Mine coin</button>
+                        <Grid item lg={4} sm={6} xl={3} xs={12}>
+                            <Balance amount={balance} />
+                        </Grid>
+                        <Grid item lg={8} md={12} xl={9} xs={12}>
+                            <SendCoin />
+                        </Grid>
+                        <Grid item lg={6} md={12} xl={9} xs={12}>
+                            <LastestBlocks blocks={blocks} />
+                        </Grid>
+                        <Grid item lg={6} md={12} xl={9} xs={12}>
+                            <LastestTransactions transactions={transactions} />
                         </Grid>
                     </Grid>
                 </Container>
-        </Box>
+            </Box>
         </>
     );
 };

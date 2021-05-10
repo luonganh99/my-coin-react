@@ -1,46 +1,35 @@
 import { Outlet } from 'react-router-dom';
-import MainNavbar from './MainNavbar';
+// import { experimentalStyled } from '@material-ui/core';
 
-const MainLayoutRoot = experimentalStyled('div')(
-  ({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    height: '100%',
-    overflow: 'hidden',
-    width: '100%'
-  })
-);
+// import MainNavbar from './MainNavbar';
 
-const MainLayoutWrapper = experimentalStyled('div')({
-  display: 'flex',
-  flex: '1 1 auto',
-  overflow: 'hidden',
-  paddingTop: 64
-});
+// const MainLayoutRoot = experimentalStyled('div')(({ theme }) => ({
+//     backgroundColor: theme.palette.background.paper,
+//     display: 'flex',
+//     height: '100%',
+//     overflow: 'hidden',
+//     width: '100%',
+// }));
 
-const MainLayoutContainer = experimentalStyled('div')({
-  display: 'flex',
-  flex: '1 1 auto',
-  overflow: 'hidden'
-});
+// const MainLayoutWrapper = experimentalStyled('div')({
+//     display: 'flex',
+//     flex: '1 1 auto',
+//     overflow: 'hidden',
+//     paddingTop: 64,
+// });
 
-const MainLayoutContent = experimentalStyled('div')({
-  flex: '1 1 auto',
-  height: '100%',
-  overflow: 'auto'
-});
+// const MainLayoutContainer = experimentalStyled('div')({
+//     display: 'flex',
+//     flex: '1 1 auto',
+//     overflow: 'hidden',
+// });
 
-const MainLayout = () => (
-  <MainLayoutRoot>
-    <MainNavbar />
-    <MainLayoutWrapper>
-      <MainLayoutContainer>
-        <MainLayoutContent>
-          <Outlet />
-        </MainLayoutContent>
-      </MainLayoutContainer>
-    </MainLayoutWrapper>
-  </MainLayoutRoot>
-);
+// const MainLayoutContent = experimentalStyled('div')({
+//     flex: '1 1 auto',
+//     height: '100%',
+//     overflow: 'auto',
+// });
+
+const MainLayout = () => <Outlet />;
 
 export default MainLayout;

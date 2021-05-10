@@ -11,9 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink, useNavigate  } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { ENDPOINT } from '../../config';
+import { useAuthContext } from '../../context/AuthContext';
 
 function Copyright() {
     return (
@@ -69,8 +70,10 @@ const useStyles = makeStyles((theme) => ({
 
 const AccessWallet = () => {
     const classes = useStyles();
-    const { register, handleSubmit, control } = useForm();
-    const navigate = useNavigate ();
+    const { handleSubmit, control } = useForm();
+    const navigate = useNavigate();
+
+    const { onLogin } = useAuthContext();
 
     const renderInputs = () => {
         const inputs = [];
@@ -107,7 +110,8 @@ const AccessWallet = () => {
             return;
         }
 
-        navigate('/dashboard');
+        onLogin(res.data);
+        navigate('/app/dashboard');
     };
 
     return (
