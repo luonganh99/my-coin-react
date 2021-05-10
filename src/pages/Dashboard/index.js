@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import Layout from '../../components/Layout';
+import Layout from '../../components/DashboardLayout';
 import axios from 'axios';
 import socketIOClient from 'socket.io-client';
+import {
+    Box,
+    Container,
+    Grid
+  } from '@material-ui/core';
+import Budget from '../../components/Budget';
 
 const ENDPOINT = 'http://localhost:4000';
 
@@ -39,10 +45,42 @@ const Dashboard = () => {
     };
 
     return (
-        <Layout>
-            <button onClick={handleSendCoinClick}>Send coin</button>
-            <button onClick={handleMineCoinClick}>Mine coin</button>
-        </Layout>
+        <>
+            <Box
+                sx={{
+                    backgroundColor: 'background.default',
+                    minHeight: '100%',
+                    py: 3
+                }}
+            >
+                <Container maxWidth={false}>
+                    <Grid
+                    container
+                    spacing={3}
+                    >
+                        <Grid
+                            item
+                            lg={3}
+                            sm={6}
+                            xl={3}
+                            xs={12}
+                        >
+                            {/* <button onClick={handleSendCoinClick}>Send coin</button> */}
+                            <Budget />
+                        </Grid>
+                        <Grid
+                            item
+                            lg={3}
+                            sm={6}
+                            xl={3}
+                            xs={12}
+                        >
+                            <button onClick={handleMineCoinClick}>Mine coin</button>
+                        </Grid>
+                    </Grid>
+                </Container>
+        </Box>
+        </>
     );
 };
 

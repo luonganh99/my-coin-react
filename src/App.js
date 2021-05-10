@@ -1,37 +1,18 @@
-import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import AccessWallet from './pages/AccessWallet';
-import CreateWallet from './pages/CreateWallet';
-import Dashboard from './pages/Dashboard';
+import { ThemeProvider } from '@material-ui/core';
+import { useRoutes } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import GlobalStyles from 'src/components/GlobalStyles';
+import routes from './routes';
+import theme from './theme';
 
 const App = () => {
-    // const [response, setResponse] = useState('');
-
-    // useEffect(() => {
-    //     const generateMnemoricPhrase = async () => {
-    //         const res = await axios.get(ENDPOINT + '/generateMnemoricPhrase');
-    //         console.log(res.data);
-    //     };
-
-    //     generateMnemoricPhrase();
-    // }, []);
+    const routing = useRoutes(routes);
 
     return (
-        <Router>
-            <Switch>
-                <Redirect exact from='/' to='/create-wallet' />
-                <Route path='/dashboard'>
-                    <Dashboard />
-                </Route>
-                <Route path='/create-wallet'>
-                    <CreateWallet />
-                </Route>
-                <Route path='/access-wallet'>
-                    <AccessWallet />
-                </Route>
-            </Switch>
-        </Router>
+        <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            {routing}
+        </ThemeProvider>
     );
 };
 

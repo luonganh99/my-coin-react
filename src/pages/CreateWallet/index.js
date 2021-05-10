@@ -19,7 +19,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { ENDPOINT } from '../../config';
 
@@ -79,7 +79,7 @@ const CreateWallet = () => {
     const classes = useStyles();
     const [phrase, setPhrase] = useState([]);
     // const [confirmPhrase, setConfirmPhrase] = useState([]);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const { control, handleSubmit, setValue, getValues } = useForm();
 
@@ -123,7 +123,8 @@ const CreateWallet = () => {
             toast.error('Invalid Mnemonic. Please try again !');
             return;
         }
-        history.push('/access-wallet');
+        
+        navigate('/access-wallet');
     };
 
     const handleClose = () => {

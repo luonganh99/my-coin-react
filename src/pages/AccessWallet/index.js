@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useNavigate  } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { ENDPOINT } from '../../config';
 
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 const AccessWallet = () => {
     const classes = useStyles();
     const { register, handleSubmit, control } = useForm();
-    const history = useHistory();
+    const navigate = useNavigate ();
 
     const renderInputs = () => {
         const inputs = [];
@@ -107,7 +107,7 @@ const AccessWallet = () => {
             return;
         }
 
-        history.push('/dashboard');
+        navigate('/dashboard');
     };
 
     return (
