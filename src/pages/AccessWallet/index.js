@@ -101,12 +101,12 @@ const AccessWallet = () => {
     const onSubmit = async (data) => {
         const inputs = Object.values(data);
 
-        const res = await axios.post(ENDPOINT + '/validateMnemoricPhrase', {
-            mnemoric: inputs.join(' '),
+        const res = await axios.post(ENDPOINT + '/validateMnemonicPhrase', {
+            mnemonic: inputs.join(' '),
         });
 
         if (!res.data.note) {
-            toast.error('Invalid mnemoric. Please try again !');
+            toast.error('Invalid mnemonic. Please try again !');
             return;
         }
 

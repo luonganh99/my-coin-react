@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ENDPOINT } from '../../config';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -53,7 +53,7 @@ const SendCoin = (props) => {
                             }
                             control={control}
                             name='amount'
-                            defaultValue=''
+                            defaultValue='50'
                         />
                         <Controller
                             as={
@@ -67,7 +67,7 @@ const SendCoin = (props) => {
                             }
                             control={control}
                             name='toAddress'
-                            defaultValue=''
+                            defaultValue='03c9fbe312af86a63695f7e184149751672f9c667a2b4b141339301fb56f11cbc2'
                         />
                     </Box>
                 </CardContent>
@@ -90,7 +90,6 @@ const SendCoin = (props) => {
                     </Button>
                 </Box>
             </Card>
-            <ToastContainer />
         </form>
     );
 };

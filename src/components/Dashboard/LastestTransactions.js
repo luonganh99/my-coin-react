@@ -1,50 +1,79 @@
 import {
-    Avatar,
     Box,
     Button,
     Card,
     CardHeader,
     Divider,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
 } from '@material-ui/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import dayjs from 'dayjs';
 
-const LastestTransactions = ({ transactions, ...props }) => {
+const LatestTransactions = ({ transactions, ...props }) => {
     return (
         <Card {...props}>
             <CardHeader title='Lastest Transactions' />
             <Divider />
-
-            <List>
-                {transactions.length > 0 &&
-                    transactions.map((transaction, i) => (
-                        <ListItem
-                            divider={i < transactions.length - 1}
-                            key={transaction.transactionId}
-                        >
-                            <ListItemAvatar>
-                                <Avatar
-                                    style={{
-                                        height: 48,
-                                        width: 48,
-                                    }}
-                                >
-                                    Tx
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={transaction.transactionId} />
-
-                            <Typography>From: {transaction.sender}</Typography>
-                            <Typography>To: {transaction.recipient}</Typography>
-
-                            <Typography>{transaction.amount} RIN</Typography>
-                        </ListItem>
-                    ))}
-            </List>
-            <Divider />
+            <Box sx={{ minWidth: 800 }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Txn ID</TableCell>
+                            <TableCell>Age</TableCell>
+                            <TableCell>From</TableCell>
+                            <TableCell>To</TableCell>
+                            <TableCell>Value</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {transactions.map((transaction, id) => (
+                            <TableRow hover key={id}>
+                                <TableCell width={200}>
+                                    <div
+                                        style={{
+                                            width: 150,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                    >
+                                        {transaction.transactionId}
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    {dayjs(transaction.date).format('HH:mm:ss DD/MM')}
+                                </TableCell>
+                                <TableCell width={360}>
+                                    <div
+                                        style={{
+                                            width: 300,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                    >
+                                        {transaction.sender}
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div
+                                        style={{
+                                            width: 300,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                    >
+                                        {transaction.recipient}
+                                    </div>
+                                </TableCell>
+                                <TableCell>{transaction.amount} RIN</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Box>
             <Box
                 sx={{
                     display: 'flex',
@@ -52,12 +81,12 @@ const LastestTransactions = ({ transactions, ...props }) => {
                     p: 2,
                 }}
             >
-                <Button color='primary' size='small' variant='text'>
-                    See all
+                <Button color='primary' endIcon={<ArrowRightIcon />} size='small' variant='text'>
+                    View all
                 </Button>
             </Box>
         </Card>
     );
 };
 
-export default LastestTransactions;
+export default LatestTransactions;

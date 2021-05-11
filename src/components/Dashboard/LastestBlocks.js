@@ -11,6 +11,7 @@ import {
     ListItemText,
     Typography,
 } from '@material-ui/core';
+import dayjs from 'dayjs';
 
 const LastestBlocks = ({ blocks, ...props }) => {
     return (
@@ -32,7 +33,10 @@ const LastestBlocks = ({ blocks, ...props }) => {
                                     Bk
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary={block.index} secondary={`${block.date}`} />
+                            <ListItemText
+                                primary={block.index}
+                                secondary={`${dayjs(block.date).format('HH:mm:ss DD/MM')}`}
+                            />
                             {/* <Typography>
                                 {block.transactions[block.transactions - 1].recipient}
                             </Typography>

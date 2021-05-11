@@ -84,12 +84,12 @@ const CreateWallet = () => {
     const { control, handleSubmit, setValue, getValues } = useForm();
 
     useEffect(() => {
-        const generateMnemoricPhrase = async () => {
-            const res = await axios.get(ENDPOINT + '/generateMnemoricPhrase');
+        const generateMnemonicPhrase = async () => {
+            const res = await axios.get(ENDPOINT + '/generateMnemonicPhrase');
             setPhrase(res.data.mnemonic.split(' '));
         };
 
-        generateMnemoricPhrase();
+        generateMnemonicPhrase();
     }, []);
 
     useEffect(() => {
@@ -123,7 +123,7 @@ const CreateWallet = () => {
             toast.error('Invalid Mnemonic. Please try again !');
             return;
         }
-        
+
         navigate('/access-wallet');
     };
 
