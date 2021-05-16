@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
-import HistoryTransaction from './pages/HistoryTransaction';
+import BlockchainExplorer from './pages/BlockchainExplorer';
 import MainLayout from './components/MainLayout';
 import AccessWallet from './pages/AccessWallet';
 import CreateWallet from './pages/CreateWallet';
@@ -12,7 +12,7 @@ const routes = [
         element: <DashboardLayout />,
         children: [
             { path: 'dashboard', element: <Dashboard /> },
-            { path: 'history', element: <HistoryTransaction /> },
+            { path: 'blockchain-explorer', element: <BlockchainExplorer /> },
             { path: '*', element: <Navigate to='/404' /> },
         ],
     },

@@ -35,13 +35,23 @@ const LastestBlocks = ({ blocks, ...props }) => {
                             </ListItemAvatar>
                             <ListItemText
                                 primary={block.index}
-                                secondary={`${dayjs(block.date).format('HH:mm:ss DD/MM')}`}
+                                secondary={`${dayjs(block.date).format('HH:mm DD/MM')}`}
                             />
-                            {/* <Typography>
-                                {block.transactions[block.transactions - 1].recipient}
-                            </Typography>
-                            <Typography>{block.transactions.length + 1}</Typography> */}
-                            <Typography>{block.transactions[0].amount} RIN</Typography>
+                            <div
+                                style={{
+                                    marginRight: 450,
+                                }}
+                            >
+                                <Typography>{block.transactions.length} Txns</Typography>
+                            </div>
+                            <div
+                                style={{
+                                    width: 100,
+                                    textAlign: 'right',
+                                }}
+                            >
+                                <Typography>{block.transactions[0].amount} RIN</Typography>
+                            </div>
                             {/* <IconButton edge='end' size='small'>
                                 <MoreVertIcon />
                             </IconButton> */}
